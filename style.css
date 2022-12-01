@@ -17,7 +17,10 @@ li {
 }
 
 img {
+    width: 100%;
     max-width: 100%;
+    object-fit: cover;
+    height: 150px;
 }
 
 .wrapper {
@@ -125,4 +128,34 @@ footer
     font-size: 0.5rem;
     padding: 10px 0;
     text-align: center;
+}
+/* 
+sp
+*/
+@media screen and (max-width: 600px) {
+    /* 
+    mainvisual
+    */
+    #mainvisual img {
+        height: calc(100vh - 60px);
+    }
+    /* 
+    about
+    */
+    #about .content {
+        flex-direction: column;
+    }
+    #about img {
+        margin-right: 0;
+    }
+    /* 
+    bicycle
+    */
+    #bicycle ul {
+        flex-direction: column;
+    }
+    #bicycle li {
+        width: 100%;
+        margin-bottom: 30px;
+    }
 }
