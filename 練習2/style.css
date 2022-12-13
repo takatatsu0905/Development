@@ -1,0 +1,25 @@
+html {
+    font-size: 100%;
+}
+
+body {
+    font-size: 0.9rem;
+    color: #858585;
+}
+
+a {
+    color: #858585;
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+/* 
+header 
+*/
+
+#header {
+    
+}
