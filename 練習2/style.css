@@ -5,6 +5,7 @@ html {
 body {
     font-size: 0.9rem;
     color: #858585;
+    margin: 0;
 }
 
 a {
@@ -16,6 +17,10 @@ li {
     list-style: none;
 }
 
+.wrapper {
+    max-width: 960px;
+}
+
 /* 
 header 
 */
@@ -23,9 +28,8 @@ header
 #header {
     margin: 0 auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding-top: 60px;
 }
 
 #header ul {
@@ -34,4 +38,13 @@ header
 
 #header li {
     margin-right: 15px;
+}
+
+#header h1 {
+    padding: 70px 0;
+    margin: 0;
+}
+
+#header ul {
+    margin: 0;
 }
