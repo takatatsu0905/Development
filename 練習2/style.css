@@ -17,8 +17,22 @@ li {
     list-style: none;
 }
 
+img {
+    width: 100%;
+    max-width: 100%;
+    object-fit: cover;
+}
+
 .wrapper {
     max-width: 960px;
+    text-align: center;
+    margin: 0 auto 100px auto;
+}
+
+.section-title {
+    display: inline-block;
+    font-size: 1.8rem;
+    margin-bottom: 100px;
 }
 
 /* 
@@ -30,6 +44,10 @@ header
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+#header h1 a {
+    font-size: 35px;
 }
 
 #header ul {
@@ -48,3 +66,22 @@ header
 #header ul {
     margin: 0;
 }
+
+.snslogo {
+    height: 20px;
+}
+
+/* 
+main
+*/
+
+#mainvisual {
+    margin-bottom: 100px;
+}
+
+.mainimg {
+    width: 100%;
+    max-width: 1920px;
+    margin-bottom: 100px;
+}
+
