@@ -26,13 +26,14 @@ img {
 .wrapper {
     max-width: 960px;
     text-align: center;
-    margin: 0 auto 100px auto;
+    margin: 0 auto 130px auto;
 }
 
 .section-title {
     display: inline-block;
     font-size: 1.8rem;
-    margin-bottom: 100px;
+    margin-bottom: 80px;
+    border-bottom: solid 1px;
 }
 
 /* 
@@ -82,6 +83,43 @@ main
 .mainimg {
     width: 100%;
     max-width: 1920px;
+    height: 420px;
     margin-bottom: 100px;
 }
 
+/* 
+About
+*/
+
+#About img {
+    width: 80px;
+    border-radius: 50%;
+}
+
+#About .content {
+
+}
+
+#About .content-title {
+    font-size: 1.2rem;
+    margin: 25px 0 30px 0;
+}
+
+/* 
+works
+*/
+
+#works ul {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0px;
+}
+
+#works li {
+    margin-bottom: 35px;
+}
+
+#works img {
+    width: 250px;
+}
