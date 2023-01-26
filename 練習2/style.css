@@ -96,9 +96,9 @@ About
     border-radius: 50%;
 }
 
-#About .content {
+/* #About .content {
 
-}
+} */
 
 #About .content-title {
     font-size: 1.2rem;
@@ -122,4 +122,28 @@ works
 
 #works img {
     width: 250px;
+}
+
+/* 
+news
+*/
+
+#news {
+
+}
+
+#news dl {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#news dt {
+    width: 20%;
+    border-bottom: 1px solid;
+}
+
+#news dd {
+    width:80%;
+    margin: 0px;
+    border-bottom: 1px solid;
 }
