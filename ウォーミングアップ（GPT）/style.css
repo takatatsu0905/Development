@@ -1,0 +1,25 @@
+html {
+    font-size: 100%;
+}
+
+body {
+    margin: 0 auto;
+    background-color: #ffffff;
+}
+
+.box {
+    background-color: gray;
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box h1 {
+    color: blue;
+    margin: 0;
+}
