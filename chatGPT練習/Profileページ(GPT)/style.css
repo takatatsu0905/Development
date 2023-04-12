@@ -1,6 +1,5 @@
 html {
     font-size: 100%;
-    font-family: cursive;
 }
 
 body {
@@ -8,16 +7,16 @@ body {
 }
 
 /* header */
-
 .header-all {
     display: flex;
     justify-content: space-around;
     background-color: #cfe8ed;
     align-items: center;
+    font-family: cursive;
 }
 
 .header-all h1 {
-
+    font-size: 1.5rem;
 }
 
 .header-all ul {
@@ -32,4 +31,56 @@ body {
 .header-all a {
     color: #000000;
     text-decoration-line: none;
+}
+
+.header-all a:hover {
+    text-decoration: underline;
+}
+
+/* main */
+.Profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15rem 0 16rem 0;
+}
+
+.Profile h1 {
+    font-size: 4rem;
+    font-family: cursive;
+    border-bottom: inset 3px;
+}
+
+.Profile-img {
+    display: flex;
+    justify-content: center;
+}
+
+.Profile-img img {
+    margin-right: 35px;
+}
+
+.Profile-img img:last-child {
+    margin: 0;
+}
+
+.self-introduction {
+    margin-top: 1.5rem;
+    margin-bottom: 10rem;
+    text-align: center;
+}
+
+/* footer */
+
+footer {
+    background-color: rgb(167, 167, 167);
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer p {
+    font-family: serif;
+    margin-right: 10px;
 }
