@@ -1,0 +1,35 @@
+html {
+    font-size: 100%;
+    font-family: cursive;
+}
+
+body {
+    margin: 0 auto;
+}
+
+/* header */
+
+.header-all {
+    display: flex;
+    justify-content: space-around;
+    background-color: #cfe8ed;
+    align-items: center;
+}
+
+.header-all h1 {
+
+}
+
+.header-all ul {
+    display: flex;
+}
+
+.header-all li {
+    list-style: none;
+    margin-right: 30px;
+}
+
+.header-all a {
+    color: #000000;
+    text-decoration-line: none;
+}
