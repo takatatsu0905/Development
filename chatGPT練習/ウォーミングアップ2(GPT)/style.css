@@ -1,0 +1,21 @@
+html {
+    font-size: 100%;
+}
+
+body {
+    margin: 0 auto;
+    background-color: rgb(196, 196, 243);
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 59rem;
+}
+
+.content p {
+    font-size: 30px;
+    color: #ffffff;
+    margin: 20px;
+}
