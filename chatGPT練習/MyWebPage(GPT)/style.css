@@ -1,0 +1,51 @@
+body{
+    font-size: 100%;
+    margin: 0 auto;
+    background-color: #eee;
+    font-family: cursive;
+}
+
+/* header */
+
+header {
+    background-color: #fff;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+/* main */
+
+main {
+    height: 500px;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main p {
+    margin: 0;
+    font-size: 30px;
+}
+
+/* footer */
+
+footer {
+    height: 50px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer p {
+    margin: 0;
+    font-size: 10px;
+}
