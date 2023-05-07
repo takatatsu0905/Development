@@ -1,0 +1,106 @@
+body {
+    margin: 0 auto;
+}
+
+/* ヘッダー要素 */
+
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+header h1 {
+
+}
+
+header ul {
+    display: flex;
+}
+
+header li {
+    margin-right: 10px;
+    list-style: none;
+}
+
+header a {
+    color: black;
+    text-decoration: none;
+}
+
+header a:hover {
+    color: red;
+    border-bottom: solid 1px;
+}
+
+/* 
+main_visual要素 
+*/
+
+.main_visual {
+    display: flex;
+    justify-content: center;
+
+}
+
+.main_visual img {
+    width: 100%;
+    max-width: 1920px;
+    height: 550px;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+/* 
+About要素 
+*/
+
+.about {
+    display: flex;
+    justify-content: center;
+    margin-top: 10rem;
+}
+
+.about h1 {
+    margin: 0;
+    font-family: "Kokoro", serif;
+    font-size: 4rem;
+    border-bottom: 1px solid;
+}
+
+/* 
+blog
+ */
+
+.blog {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10rem;
+}
+
+.blog article {
+    margin: 8rem 50px 0 50px;
+    text-align: center;
+    border-top: solid 5px #5d627b;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
+}
+
+.blog img {
+    width: 23rem;
+}
+/* 
+footer
+*/
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #d2c9c9;
+    height: 3rem;
+}
+
+footer p {
+    font-size: 0.5rem;
+}
