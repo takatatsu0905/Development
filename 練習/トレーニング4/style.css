@@ -1,0 +1,27 @@
+body {
+    margin: 0 auto;
+}
+
+.aaa {
+    height: 100vh;
+    position: relative;
+}
+
+.content {
+    font-family: fantasy;
+    color: #000;
+    position: absolute;
+    text-align: center;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20vh;
+    width: 30rem;
+}
+
+.content h1 {
+    margin: 0;
+    font-size: 100px;
+}
