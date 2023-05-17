@@ -1,0 +1,22 @@
+body {
+    margin: 0 auto;
+}
+
+.test {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+.aiisaty {
+    color: red;
+}
+
+.test2 {
+    text-align: center;
+}
