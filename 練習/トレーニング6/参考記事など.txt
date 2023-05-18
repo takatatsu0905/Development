@@ -1,2 +1,2 @@
 参考サイト：https://gray-code.com/php/make-the-board-vol2/
-5/17追記 続き：https://gray-code.com/php/make-the-board-vol8/
+5/18追記：https://gray-code.com/php/make-the-board-vol12/
