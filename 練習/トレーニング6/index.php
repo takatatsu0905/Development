@@ -61,6 +61,7 @@ if (!empty($_POST['btn_submit'])) {
 
     // エラーがなければ書き込み処理実行
     if (empty($error_message)) {
+        // コメントアウト
         // // メッセージを書き込む
         // if($file_handle = fopen(FILENAME, "a")){
         //     // 書き込み日時
@@ -78,6 +79,7 @@ if (!empty($_POST['btn_submit'])) {
         //     // メッセージ書き込み後のテキスト
         //     $success_message = 'メッセージを書き込みました。';
         // }
+        // ここまで
 
         // 書き込み日時を取得
         $current_date = date("Y-m-d H:i:s");
@@ -96,7 +98,7 @@ if (!empty($_POST['btn_submit'])) {
             $stmt -> bindParam(':current_date', $current_date, PDO::PARAM_STR);
 
             // SQLクエリの実行
-            $res = $stmt->execute();
+            $res = $stmt -> execute();
 
             // コミット
             $res = $pdo -> commit();
@@ -119,28 +121,36 @@ if (!empty($_POST['btn_submit'])) {
     }
 }
 
+if (empty($error_message)) {
+    // メッセージのデータを取得する
+    $sql = "SELECT view_name,message,post_date FROM message ORDER BY post_date DESC";
+    $message_array = $pdo -> query($sql);
+}
+
 // データベースの接続を閉じる
 $pdo = null;
 
-// 書き込まれているメッセージを表示させる処理
-if ($file_handle = fopen( FILENAME, 'r')) {
-    // messageファイルにデータが入っていれば開く
-    while ($data = fgets($file_handle)) {
-        // message.txtからデータを取得
-        $split_data = preg_split('/\'/', $data);
+// コメントアウト
+// // 書き込まれているメッセージを表示させる処理
+// if ($file_handle = fopen( FILENAME, 'r')) {
+//     // messageファイルにデータが入っていれば開く
+//     while ($data = fgets($file_handle)) {
+//         // message.txtからデータを取得
+//         $split_data = preg_split('/\'/', $data);
 
-        // データを配列に格納
-        $message = array(
-            'view_name' => $split_data[1],
-            'message' => $split_data[3],
-            'post_date' =>  $split_data[5]
-        );
-        // $message_arrayに$messageごと格納
-        array_unshift($message_array, $message);
-    }
-    // ファイルを閉じる
-    fclose($file_handle);
-}
+//         // データを配列に格納
+//         $message = array(
+//             'view_name' => $split_data[1],
+//             'message' => $split_data[3],
+//             'post_date' =>  $split_data[5]
+//         );
+//         // $message_arrayに$messageごと格納
+//         array_unshift($message_array, $message);
+//     }
+//     // ファイルを閉じる
+//     fclose($file_handle);
+// }
+// ここまで
 ?>
 
 <!DOCTYPE html>
@@ -196,7 +206,7 @@ if ($file_handle = fopen( FILENAME, 'r')) {
                             <?php echo date('Y年m月d日 H:i', strtotime($value['post_date'])) ;?>
                         </time>
                     </div>
-                    <p><?php echo $value['message'] ;?></p>
+                    <p><?php echo nl2br($value['message']) ;?></p>
                 </article>
             <?php endforeach ;?>
         <?php endif ;?>
