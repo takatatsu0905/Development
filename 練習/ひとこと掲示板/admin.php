@@ -34,6 +34,7 @@ try {
 
     // データベース接続(= 離さない)
     $pdo = new PDO('mysql:charset=UTF8; dbname='.DB_NAME.'; host='.DB_HOST, DB_USER, DB_PASS, $option);
+
 } catch(PDOException $e) {
     // 接続エラー時、エラー内容を取得
     $error_message[] = $e -> getMessage();
@@ -42,6 +43,7 @@ try {
 
 // ログイン判定チェック
 if (!empty($_POST['btn_submit'])) {
+
     if (!empty($_POST['admin_password']) &&  $_POST['admin_password'] === PASSWORD) {
         $_SESSION['admin_login'] = true;
     } else {
@@ -51,7 +53,7 @@ if (!empty($_POST['btn_submit'])) {
 
 if (!empty($pdo)) {
     // メッセージのデータを取得する
-    $sql = "SELECT view_name,message,post_date FROM message ORDER BY post_date DESC";
+    $sql = "SELECT * FROM message ORDER BY post_date DESC";
     $message_array = $pdo -> query($sql);
 }
 
@@ -68,6 +70,13 @@ $pdo = null;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ひとこと掲示板 管理ページ</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .info p {
+            display: inline-block;
+            line-height: 1.6em;
+            font-size: 86%;
+        }
+    </style>
 </head>
 <body>
     <h1>ひとこと掲示板 管理ページ</h1>
@@ -102,6 +111,14 @@ $pdo = null;
                         <time>
                             <?php echo date('Y年m月d日 H:i', strtotime($value['post_date'])) ;?>
                         </time>
+                        <p>
+                            <a href="edit.php?message_id=<?php echo $value['id']; ?>">
+                                編集
+                            </a>
+                            <a href="delete.php?message_id=<?php echo $value['id']; ?>">
+                                削除
+                            </a>
+                        </p>
                     </div>
                     <p><?php echo nl2br(htmlspecialchars($value['message'], ENT_QUOTES, 'UTF-8')) ;?></p>
                 </article>
