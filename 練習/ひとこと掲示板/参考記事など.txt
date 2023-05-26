@@ -1,2 +1,1 @@
-参考サイト：https://gray-code.com/php/make-the-board-vol2/
-5/25追記：https://gray-code.com/php/make-the-board-vol21/
+参考サイト：https://gray-code.com/php/make-the-board-vol1/
