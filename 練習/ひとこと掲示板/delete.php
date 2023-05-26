@@ -64,57 +64,35 @@ if (!empty($_GET['message_id']) && empty($_POST['message_id']) ) {
 
 } elseif(!empty($_POST['message_id'])) {
 
-    // 空白除去
-    $view_name = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', $_POST['view_name']);
-    $message = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', $_POST['message']);
+    // トランザクションを開始
+    $pdo -> beginTransaction();
 
-    // 表示名の入力チェック
-    if (empty($view_name)) {
-        $error_message[] = '表示名を入力してください。';
+    try {
+
+        // SQLを作成
+        $stmt = $pdo -> prepare("DELETE FROM message WHERE id = :id");
+
+        // 値をセット
+        $stmt -> bindValue(':id', $_POST['message_id'], PDO::PARAM_INT);
+
+        // SQLを実行
+        $stmt -> execute();
+
+        // コミット
+        $res = $pdo -> commit();
+
+    } catch(Exception $e) {
+
+        // エアーが発生した場合ロールバック
+        $pdo -> rollBack();
     }
 
-    // メッセージの入力チェック
-    if (empty($message)) {
-        $error_message[] = 'ひとことメッセージを入力してください。';
-    } else {
-        // 文字数を確認
-        if (100 < mb_strlen($message, 'UTF-8')) {
-            $error_message[] = 'ひとことメッセージは100文字以内で入力してください。';
-        }
+    // 削除に成功したら一覧に戻る
+    if($res) {
+        header("Location: ./admin.php");
+        exit;
     }
-    // エラーが無ければ書き込み処理
-    if (empty($error_message)) {
-        
-        //トランザクション開始
-        $pdo -> beginTransaction();
 
-        try {
-
-            // SQL作成
-            $stmt = $pdo -> prepare("UPDATE message SET view_name = :view_name, message= :message WHERE id = :id");
-
-            // 値をセット
-            $stmt -> bindParam(':view_name', $view_name, PDO::PARAM_STR);
-            $stmt -> bindParam(':message', $message, PDO::PARAM_STR);
-            $stmt -> bindParam(':id', $_POST['message_id'], PDO::PARAM_INT);
-
-            // SQLクエリ実行
-            $stmt -> execute();
-
-            // コミット
-            $res = $pdo -> commit();
-
-        } catch(Exception $e) {
-            // エラーが発生した場合ロールバック
-            $pdo -> rollBack();
-        }
-
-        // 更新に成功した場合一覧に戻る
-        if ($res) {
-            header("Location: ./admin.php");
-            exit;
-        }
-    }
 }
 
 // データベースの接続を閉じる
@@ -129,7 +107,7 @@ $pdo = null;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ひとこと掲示板 管理ページ（投稿の編集）</title>
+    <title>ひとこと掲示板 管理ページ（投稿の削除）</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .btn_cancel {
@@ -146,32 +124,46 @@ $pdo = null;
             border-color: #999;
             text-decoration: none;
         }
+        .text-confirm {
+            margin-bottom: 20px;
+            font-size: 86%;
+            line-height: 1.6rem;
+        }
     </style>
 </head>
 <body>
-    <h1>ひとこと掲示板 管理ページ（投稿の編集）</h1>
+    <h1>ひとこと掲示板 管理ページ（投稿の削除）</h1>
 
     <!-- エラーメッセージ -->
     <?php if(!empty($error_message)) :?>
         <ul class="error_message">
-            <?php foreach($error_message as $value) :?>
-                <li>・<?php echo $value ;?></li>
+            <?php foreach($error_message as $value) :?><li>・
+                <?php echo $value ;?></li>
             <?php endforeach ;?>
         </ul>
     <?php endif ;?>
 
+    <!-- 削除確認テキスト -->
+    <p class="text-confirm">
+        以下の投稿を削除します。<br>
+        よろしければ「削除」ボタンを押してください。
+    </p>
+
     <!-- 入力フォーム -->
     <form method="post" action="">
+
         <div>
             <label for="view_name">表示名</label>
-            <input id="view_name" type="text" name="view_name" value="<?php if(!empty($message_data['view_name'])){echo $message_data['view_name']; }elseif(!empty($view_name)) {echo htmlspecialchars($view_name, ENT_QUOTES, 'UTF-8'); }?>">
+            <input id="view_name" type="text" name="view_name" value="<?php if(!empty($message_data['view_name'])){echo $message_data['view_name']; }elseif(!empty($view_name)) {echo htmlspecialchars($view_name, ENT_QUOTES, 'UTF-8'); }?>" disabled>
         </div>
+
         <div>
             <label for="message">ひとことメッセージ</label>
-            <textarea name="message" id="message"><?php if(!empty($message_data['message'])) {echo $message_data['message']; }elseif(!empty($message)) {echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); }?></textarea>
+            <textarea name="message" id="message" disabled><?php if(!empty($message_data['message'])) {echo $message_data['message']; }elseif(!empty($message)) {echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); }?></textarea>
         </div>
+
         <a class="btn_cancel" href="admin.php">キャンセル</a>
-        <input type="submit" name="btn_submit" value="更新">
+        <input type="submit" name="btn_submit" value="削除">
         <input type="hidden" name="message_id" value="
         <?php if(!empty($message_data['id'])){echo $message_data['id']; }elseif(!empty($_POST['message_id'])) {echo htmlspecialchars(($_POST['message_id']), ENT_QUOTES, 'UTF-8'); }?>">
     </form>

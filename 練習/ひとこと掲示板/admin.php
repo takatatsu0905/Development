@@ -1,7 +1,7 @@
 <?php
 
 // 管理ページのログインパスワード
-define('PASSWORD', 'adminPassword');
+define('PASSWORD', 'hitokoto95');
 
 // データベースの接続情報
 define('DB_HOST', 'localhost');
@@ -24,6 +24,11 @@ $res = null;
 $option = null;
 
 session_start();
+
+// ログインセッションを削除
+if (!empty($_GET['btn_logout'])) {
+    unset($_SESSION['admin_login']);
+}
 
 // データベース接続
 try {
@@ -71,11 +76,22 @@ $pdo = null;
     <title>ひとこと掲示板 管理ページ</title>
     <link rel="stylesheet" href="style.css">
     <style>
+
         .info p {
             display: inline-block;
             line-height: 1.6em;
             font-size: 86%;
         }
+
+        input[name=btn_logout] {
+            margin-top: 40px;
+            background-color: #666;
+        }
+
+        input[name=btn_logout]:hover {
+            background-color: #777;
+        }
+
     </style>
 </head>
 <body>
@@ -90,6 +106,7 @@ $pdo = null;
         </ul>
     <?php endif ;?>
 
+    <!-- ログインセッション確認 -->
     <?php if(!empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true) :?>
     
     <form action="./download.php" method="get">
@@ -124,6 +141,11 @@ $pdo = null;
                 </article>
             <?php endforeach ;?>
         <?php endif ;?>
+        
+        <form action="" method="get">
+            <input type="submit" name ="btn_logout" value="ログアウト">
+        </form>
+
     </section>
 <?php else :?>
     <form action="" method="post">

@@ -53,7 +53,12 @@ if (!empty($_POST['btn_submit'])) {
     // メッセージの入力チェック
     if (empty($message)) {
         $error_message[] = 'ひとことメッセージを入力してください。';
-    } 
+    } else {
+        // 文字数を確認
+        if (100 < mb_strlen($message, 'UTF-8')) {
+            $error_message[] = 'ひとことメッセージは100文字以内で入力してください。';
+        }
+    }
 
     // エラーがなければ書き込み処理実行
     if (empty($error_message)) {
@@ -88,13 +93,17 @@ if (!empty($_POST['btn_submit'])) {
         }
 
         if ($res) {
-            $success_message = 'メッセージを書き込みました。';
+            $_SESSION['success_message'] = 'メッセージを書き込みました。';
         } else {
             $error_message[] = '書き込みに失敗しました。';
         }
 
         // プリペアードステートメントを削除
         $stmt = null;
+
+        // リダイレクト処理
+        header('Location: ./');
+        exit;
     }
 }
 
@@ -122,9 +131,10 @@ $pdo = null;
     <h1>ひとこと掲示板</h1>
 
     <!-- 投稿完了メッセージ -->
-    <?php if(!empty($success_message)) :?>
+    <?php if(empty($_POST['btn_submit']) && !empty($_SESSION['success_message']) ) :?>
         <p class="success_message">
-            <?php echo $success_message ;?>
+            <?php echo htmlspecialchars($_SESSION['success_message'], ENT_QUOTES, 'UTF-8') ;?>
+            <?php unset($_SESSION['success_message']) ;?>
         </p>
     <?php endif ;?>
 
@@ -141,14 +151,11 @@ $pdo = null;
     <form method="post" action="">
         <div>
             <label for="view_name">表示名</label>
-            <input id="view_name" type="text" name="view_name" value=
-            "<?php if(!empty($_SESSION['view_name'])) {
-                echo htmlspecialchars($_SESSION['view_name'], ENT_QUOTES, 'UTF-8');
-            }?>">
+            <input id="view_name" type="text" name="view_name" value="<?php if(!empty($_SESSION['view_name'])){echo htmlspecialchars($_SESSION['view_name'], ENT_QUOTES, 'UTF-8');}?>">
         </div>
         <div>
             <label for="message">ひとことメッセージ</label>
-            <textarea name="message" id="message"></textarea>
+            <textarea name="message" id="message"><?php if(!empty($message)) {echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ;}?></textarea>
         </div>
         <input type="submit" name="btn_submit" value="書き込む">
     </form>
@@ -161,9 +168,7 @@ $pdo = null;
                 <article>
                     <div class="info">
                         <h2><?php echo htmlspecialchars($value['view_name'], ENT_QUOTES, 'UTF-8') ;?></h2>
-                        <time>
-                            <?php echo date('Y年m月d日 H:i', strtotime($value['post_date'])) ;?>
-                        </time>
+                        <time><?php echo date('Y年m月d日 H:i', strtotime($value['post_date'])) ;?></time>
                     </div>
                     <p><?php echo nl2br(htmlspecialchars($value['message'], ENT_QUOTES, 'UTF-8')) ;?></p>
                 </article>

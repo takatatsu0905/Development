@@ -125,6 +125,7 @@ return;
         </ul>
     <?php endif ;?>
 
+    <!-- ログインセッション確認 -->
     <?php if(!empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true) :?>
     
     <form action="./download.php" method="get">
