@@ -22,7 +22,7 @@
 
             <!-- 現在時刻 -->
             <div>
-                <input type="button" id="time" value="現在の時刻は？？">
+                <input type="button" id="time" value="今日は何日？？">
             </div>
 
         </div>
