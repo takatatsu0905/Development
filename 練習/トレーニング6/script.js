@@ -1,3 +1,4 @@
+// クリックするとアラートでメッセージを表示刺せるイベント
 // htmlのinput(id) = btnを定数buttonに代入
 const button = document.getElementById("btn");
 
