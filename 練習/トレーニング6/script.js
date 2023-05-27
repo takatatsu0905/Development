@@ -6,8 +6,7 @@ button.addEventListener('click', function(){
     alert("こんにてゃ！");
 });
 
-
-
+// 現在時刻を表示するイベント
 const Time = document.getElementById("time");
 const Box = document.getElementById('tBox');
 
