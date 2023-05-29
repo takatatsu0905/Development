@@ -23,8 +23,8 @@ if (!empty($_POST['btn_confirm'])) {
 
     // ヘッダー情報を設定
     $header = "MIME-Version: 1.0\n";
-    $header .= "From: TAKATATSU事務所 <ideatakatatsu0905@gmail.com>\n";
-    $header .= "Reply-TO: TAKATATSU事務所 <ideatakatatsu0905@gmail.com>\n";
+    $header .= "From: TAKATATSU事務所 <TAKATATSUtest@gmail.com>\n";
+    $header .= "Reply-TO: TAKATATSU事務所 <TAKATATSUtest@gmail.com>\n";
 
     // 件名を設定
     $auto_reply_subject = 'お問い合わせありがとうございます。';
@@ -49,7 +49,7 @@ if (!empty($_POST['btn_confirm'])) {
     $admin_reply_text .= "メールアドレス:" . $_POST['email'] . "\n\n";
 
     // 運営側へメール送信
-    mb_send_mail('ideatakatatsu0905@gmail.com', $admin_reply_subject, $admin_reply_text, $header);
+    mb_send_mail('TAKATATSUtest@gmail.com', $admin_reply_subject, $admin_reply_text, $header);
 }
 
 ?>
@@ -97,6 +97,7 @@ if (!empty($_POST['btn_confirm'])) {
 
     <?php else:?>
         
+        <!-- 入力ページ -->
         <form action="" method="post">
 
             <div class="element_wrap">
