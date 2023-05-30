@@ -7,7 +7,7 @@ $page_flag = 0;
 $clean = array();
 $error = array();
 
-// サニタイズ
+// サニタイズ処理
 if (!empty($_POST)) {
     foreach ($_POST as $key => $value) {
         $clean[$key] = htmlspecialchars($value, ENT_QUOTES);
