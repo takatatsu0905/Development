@@ -3,11 +3,8 @@
 // 管理ページのログインパスワード
 define('PASSWORD', 'hitokoto95');
 
-// データベースの接続情報
-define('DB_HOST', 'localhost');
-define('DB_USER', 'takatatsu');
-define('DB_PASS', '0905');
-define('DB_NAME', 'board');
+// db接続情報のファイル呼び出し
+require 'db_config.php';
 
 // タイムゾーン
 date_default_timezone_set('Asia/Tokyo');
