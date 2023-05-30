@@ -76,3 +76,13 @@ textarea[name = contact] {
     border-radius: 3px;
     background: #ddf0ff;
 }
+
+/* エラーメッセージ */
+.error_list {
+    padding: 10px 30px;
+    color: #ff2e5a;
+    font-size: 86%;
+    text-align: left;
+    border: 1px solid #ff2e5a;
+    border-radius: 5px;
+}
