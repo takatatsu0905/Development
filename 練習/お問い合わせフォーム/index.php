@@ -4,10 +4,23 @@ var_dump($_POST);
 
 // 変数の初期化
 $page_flag = 0;
+$clean = array();
+$error = array();
+
+// サニタイズ
+if (!empty($_POST)) {
+    foreach ($_POST as $key => $value) {
+        $clean[$key] = htmlspecialchars($value, ENT_QUOTES);
+    }
+}
 
 if (!empty($_POST['btn_confirm'])) {
     
-    $page_flag = 1;
+    $error = validation($clean);
+
+    if (empty($error)) {
+        $page_flag = 1;
+    }
 
 } elseif (!empty($_POST['btn_submit'])) {
     
@@ -95,6 +108,44 @@ if (!empty($_POST['btn_confirm'])) {
 
     // 運営側へメール送信
     mb_send_mail('TAKATATSUtest@gmail.com', $admin_reply_subject, $admin_reply_text, $header);
+}
+
+function validation($date) {
+    
+    $error = array();
+
+    // 氏名のバリデーション
+    if (empty($date['your_name'])) {
+        $error[] = "「氏名」は必ず入力してください。";
+    } 
+    
+    // メールアドレスのバリデーション
+    if (empty($date['email'])) {
+        $error[] = "「メールアドレス」は必ず入力してください。";
+    }
+
+    // 性別のバリデーション
+    if (empty($date['gender'])) {
+        $error[] = "「性別」は必ず入力してください。";
+    }
+
+    // 年齢のバリデーション
+    if (empty($date['age'])) {
+        $error[] = "「年齢」は必ず入力してください。";
+    }
+
+    // お問い合わせ内容のバリデーション
+    if (empty($date['contact'])) {
+        $error[] = "「お問い合わせ内容」は必ず入力してください。";
+    }
+
+    // プライバシーポリシーのバリデーション
+    if (empty($date['agreement'])) {
+        $error[] = "「プライバシーポリシー」は必ず入力してください。";
+    }
+
+    return $error;
+
 }
 
 ?>
@@ -185,6 +236,15 @@ if (!empty($_POST['btn_confirm'])) {
         <p>送信が完了しました。</p>
 
     <?php else:?>
+
+        <!-- エラーメッセージ -->
+        <?php if (!empty($error)) :?>
+            <ul class="error_list">
+                <?php foreach($error as $value) :?>
+                    <li><?php echo $value ;?></li>
+                <?php endforeach ;?>
+            </ul>
+        <?php endif ;?>
         
         <!-- 入力ページ -->
         <form method="post">
