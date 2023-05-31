@@ -117,20 +117,28 @@ function validation($date) {
     // 氏名のバリデーション
     if (empty($date['your_name'])) {
         $error[] = "「氏名」は必ず入力してください。";
-    } 
+    } elseif (20 < mb_strlen($date['your_name'])) {
+        $error[] = "「氏名」は20文字で入力してください。";
+    }
     
     // メールアドレスのバリデーション
     if (empty($date['email'])) {
         $error[] = "「メールアドレス」は必ず入力してください。";
+    } elseif (!preg_match('/^[0-9a-z_.\/?-]+@([0-9a-z-]+\.)+[0-9a-z-]+$/', $date['email'])) {
+        $error[] = "「メールアドレス」は正しい形式で入力してください。";
     }
 
     // 性別のバリデーション
     if (empty($date['gender'])) {
         $error[] = "「性別」は必ず入力してください。";
+    } elseif ($date['gender'] !== 'male' && $date['gender'] !== 'female') {
+        $error[] = "「性別」は必ず入力してください。";
     }
 
     // 年齢のバリデーション
     if (empty($date['age'])) {
+        $error[] = "「年齢」は必ず入力してください。";
+    } elseif ((int)$date['age'] < 1 || 6 < (int)$date['age']) {
         $error[] = "「年齢」は必ず入力してください。";
     }
 
@@ -141,7 +149,9 @@ function validation($date) {
 
     // プライバシーポリシーのバリデーション
     if (empty($date['agreement'])) {
-        $error[] = "「プライバシーポリシー」は必ず入力してください。";
+        $error[] = "「プライバシーポリシー」をご確認ください。";
+    } elseif ((int)$date['agreement'] !== 1) {
+        $error[] = "「プライバシーポリシー」をご確認ください。";
     }
 
     return $error;
