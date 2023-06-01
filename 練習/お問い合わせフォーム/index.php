@@ -1,6 +1,6 @@
 <?php
 
-var_dump($_POST);
+define("FILE_DIR", "images/test/");
 
 // 変数の初期化
 $page_flag = 0;
@@ -17,6 +17,18 @@ if (!empty($_POST)) {
 if (!empty($_POST['btn_confirm'])) {
     
     $error = validation($clean);
+
+	// ファイルのアップロード
+	if( !empty($_FILES['attachment_file']['tmp_name']) ) {
+
+		$upload_res = move_uploaded_file( $_FILES['attachment_file']['tmp_name'], FILE_DIR.$_FILES['attachment_file']['name']);
+
+		if( $upload_res !== true ) {
+			$error[] = 'ファイルのアップロードに失敗しました。';
+		} else {
+			$clean['attachment_file'] = $_FILES['attachment_file']['name'];
+		}
+	}
 
     if (empty($error)) {
         $page_flag = 1;
@@ -181,17 +193,17 @@ function validation($date) {
             
             <div class="element_wrap">
                 <label for="">氏名</label>
-                <p><?php echo $_POST['your_name'];?></p>
+                <p><?php echo $clean['your_name'];?></p>
             </div>
 
             <div class="element_wrap">
                 <label for="">メールアドレス</label>
-                <p><?php echo $_POST['email'];?></p>
+                <p><?php echo $clean['email'];?></p>
             </div>
 
             <div class="element_wrap">
                 <label>性別</label>
-                <p><?php if ($_POST['gender'] === "male") {
+                <p><?php if ($clean['gender'] === "male") {
                     echo "男性";
                 } else {
                     echo "女性";
@@ -200,29 +212,36 @@ function validation($date) {
 
             <div class="element_wrap">
                 <label>年齢</label>
-                <p><?php if ($_POST['age'] === "1") {
+                <p><?php if ($clean['age'] === "1") {
                     echo "~19歳";
-                } elseif ($_POST['age'] === "2") {
+                } elseif ($clean['age'] === "2") {
                     echo "20歳~29歳";
-                } elseif ($_POST['age'] === "3") {
+                } elseif ($clean['age'] === "3") {
                     echo "30歳~39歳";
-                } elseif ($_POST['age'] === "4") {
+                } elseif ($clean['age'] === "4") {
                     echo "40歳~49歳";
-                } elseif ($_POST['age'] === "5") {
+                } elseif ($clean['age'] === "5") {
                     echo "50歳~59歳";
-                } elseif ($_POST['age'] === "6") {
+                } elseif ($clean['age'] === "6") {
                     echo "60歳~";
                 }?></p>
             </div>
 
             <div class="element_wrap">
                 <label>お問い合わせ内容</label>
-                <p><?php echo nl2br($_POST['contact'])?></p>
+                <p><?php echo nl2br($clean['contact'])?></p>
             </div>
+
+            <?php if(!empty($clean['attachment_file'])) :?>
+                <div class="element_wrap">
+                    <label>画像ファイルの添付</label>
+                    <p><img src="<?php echo FILE_DIR.$clean['attachment_file'] ;?>" alt=""></p>
+                </div>
+            <?php endif ;?>
 
             <div class="element_wrap">
                 <label>プライバシーポリシーに同意する</label>
-                <p><?php if ($_POST['agreement'] === "1") {
+                <p><?php if ($clean['agreement'] === "1") {
                     echo "同意する";
                 } else {
                     echo "同意しない";
@@ -231,12 +250,15 @@ function validation($date) {
 
             <input type="submit" name="btn_back" value="戻る">
             <input type="submit" name="btn_submit" value="送信">
-            <input type="hidden" name="your_name" value="<?php echo $_POST['your_name'];?>">
-            <input type="hidden" name="email" value="<?php echo $_POST['email'];?>">
-            <input type="hidden" name="gender" value="<?php echo $_POST['gender'];?>">
-            <input type="hidden" name="age" value="<?php echo $_POST['age'];?>">
-            <input type="hidden" name="contact" value="<?php echo $_POST['contact'];?>">
-            <input type="hidden" name="agreement" value="<?php echo $_POST['agreement'];?>">
+            <input type="hidden" name="your_name" value="<?php echo $clean['your_name'];?>">
+            <input type="hidden" name="email" value="<?php echo $clean['email'];?>">
+            <input type="hidden" name="gender" value="<?php echo $clean['gender'];?>">
+            <input type="hidden" name="age" value="<?php echo $clean['age'];?>">
+            <input type="hidden" name="contact" value="<?php echo $clean['contact'];?>">
+            <input type="hidden" name="agreement" value="<?php echo $clean['agreement'];?>">
+            <?php if(!empty($clean['attachment_file'])) :?>
+                <input type="hidden" name="attachment_file" value="<?php echo $clean['attachment_file'];?>">
+            <?php endif ;?>
 
         </form>
 
@@ -257,21 +279,21 @@ function validation($date) {
         <?php endif ;?>
         
         <!-- 入力ページ -->
-        <form method="post">
+        <form method="post" action="" enctype="multipart/form-data">
             
             <!-- 名前 -->
             <div class="element_wrap">
                 <label>氏名</label>
-                <input type="text" name="your_name" value="<?php if (!empty($_POST['your_name'])) {
-                    echo $_POST['your_name'];
+                <input type="text" name="your_name" value="<?php if (!empty($clean['your_name'])) {
+                    echo $clean['your_name'];
                 } ?>">
             </div>
 
             <!-- メールアドレス -->
             <div class="element_wrap">
                 <label>メールアドレス</label>
-                <input type="text" name="email" value="<?php if (!empty($_POST['email'])) {
-                    echo $_POST['email'];
+                <input type="text" name="email" value="<?php if (!empty($clean['email'])) {
+                    echo $clean['email'];
                 } ?>">
             </div>
 
@@ -279,13 +301,13 @@ function validation($date) {
             <div class="element_wrap">
                 <label>性別</label>
                 <label for="gender_male">
-                    <input type="radio" name="gender" id="gender_male" value="male" <?php if (!empty($_POST['gender']) && $_POST['gender'] === "male") {
+                    <input type="radio" name="gender" id="gender_male" value="male" <?php if (!empty($clean['gender']) && $clean['gender'] === "male") {
                         echo "checked";
                     }?>>
                     男性
                 </label>
                 <label for="gender_female">
-                    <input type="radio" name="gender" id="gender_female" value="female" <?php if (!empty($_POST['gender']) && $_POST['gender'] === "female") {
+                    <input type="radio" name="gender" id="gender_female" value="female" <?php if (!empty($clean['gender']) && $clean['gender'] === "female") {
                         echo "checked";
                     }?>>
                     女性
@@ -297,22 +319,22 @@ function validation($date) {
                 <label>年齢</label>
                 <select name="age">
                     <option value="">選択してください</option>
-                    <option value="1" <?php if (!empty($_POST['age']) && $_POST['age'] === "1") {
+                    <option value="1" <?php if (!empty($clean['age']) && $clean['age'] === "1") {
                         echo "selected";
                     }?>>~19歳</option>
-                    <option value="2" <?php if (!empty($_POST['age']) && $_POST['age'] === "2") {
+                    <option value="2" <?php if (!empty($clean['age']) && $clean['age'] === "2") {
                         echo "selected";
                     }?>>20歳~29歳</option>
-                    <option value="3" <?php if (!empty($_POST['age']) && $_POST['age'] === "3") {
+                    <option value="3" <?php if (!empty($clean['age']) && $clean['age'] === "3") {
                         echo "selected";
                     }?>>30歳~39歳</option>
-                    <option value="4" <?php if (!empty($_POST['age']) && $_POST['age'] === "4") {
+                    <option value="4" <?php if (!empty($clean['age']) && $clean['age'] === "4") {
                         echo "selected";
                     }?>>40歳~49歳</option>
-                    <option value="5" <?php if (!empty($_POST['age']) && $_POST['age'] === "5") {
+                    <option value="5" <?php if (!empty($clean['age']) && $clean['age'] === "5") {
                         echo "selected";
                     }?>>50歳~59歳</option>
-                    <option value="6" <?php if (!empty($_POST['age']) && $_POST['age'] === "6") {
+                    <option value="6" <?php if (!empty($clean['age']) && $clean['age'] === "6") {
                         echo "selected";
                     }?>>60歳~</option>
                 </select>
@@ -321,15 +343,21 @@ function validation($date) {
             <!-- お問い合わせ内容 -->
             <div class="element_wrap">
                 <label>お問い合わせ内容</label>
-                <textarea name="contact"><?php if (!empty($_POST['contact'])) {
-                    echo $_POST['contact'];
+                <textarea name="contact"><?php if (!empty($clean['contact'])) {
+                    echo $clean['contact'];
                 }?></textarea>
+            </div>
+
+            <!-- ファイル添付 -->
+            <div class="element_wrap">
+                <label>画像ファイルの添付</label>
+                <input type="file" name="attachment_file">
             </div>
 
             <!-- プライバシーポリシー -->
             <div class="element_wrap">
                 <label for="agreement">
-                    <input type="checkbox" name="agreement" id="agreement" value="1" <?php if (!empty($_POST['agreement']) && $_POST['agreement'] === "1") {
+                    <input type="checkbox" name="agreement" id="agreement" value="1" <?php if (!empty($clean['agreement']) && $clean['agreement'] === "1") {
                         echo "checked";
                     }?>>
                     プライバシーポリシーに同意する
