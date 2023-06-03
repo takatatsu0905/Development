@@ -175,7 +175,7 @@ if (!empty($clean['btn_confirm'])) {
 
     } else {
         $page_flag = 0;
-        $error[] = "もう一度入力してください。";
+        $error[] = "読み込み時にエラーが発生しました。もう一度入力してください。";
     }
 }
 
