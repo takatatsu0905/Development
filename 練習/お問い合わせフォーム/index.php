@@ -14,7 +14,7 @@ if (!empty($_POST)) {
     }
 }
 
-if (!empty($_POST['btn_confirm'])) {
+if (!empty($clean['btn_confirm'])) {
     
     $error = validation($clean);
 
@@ -32,94 +32,151 @@ if (!empty($_POST['btn_confirm'])) {
 
     if (empty($error)) {
         $page_flag = 1;
+
+        // セッションの書き込み
+        session_start();
+        $_SESSION['page'] = true;
     }
 
-} elseif (!empty($_POST['btn_submit'])) {
+} elseif (!empty($clean['btn_submit'])) {
     
-    $page_flag = 2;
-
-    // 変数とタイムゾーンを初期化
-    $header = null;
-    $auto_reply_subject = null;
-    $auto_reply_text = null;
-    $admin_reply_subject = null;
-    $admin_reply_text = null;
-    date_default_timezone_set('Asia/Tokyo');
-
-    // ヘッダー情報を設定
-    $header = "MIME-Version: 1.0\n";
-    $header .= "From: TAKATATSU事務所 <TAKATATSUtest@gmail.com>\n";
-    $header .= "Reply-TO: TAKATATSU事務所 <TAKATATSUtest@gmail.com>\n";
-
-    // 件名を設定
-    $auto_reply_subject = 'お問い合わせありがとうございます。';
-
-    // 本文を設定
-    $auto_reply_text = "この度はお問い合わせ頂き誠にありがとうございます。下記の内容でお問い合わせを受け付けました。\n\n";
-    $auto_reply_text .= "お問い合わせ日時:" . date("Y-m-d H:i") . "\n";
-    $auto_reply_text .= "氏名:" . $_POST['your_name'] . "\n";
-    $auto_reply_text .= "メールアドレス:" . $_POST['email'] . "\n";
+    // 多重送信防止
+    session_start();
     
-    if ($_POST['gender'] === "male") {
-        $auto_reply_text .= "性別:男性\n";
+    if (!empty($_SESSION['page'] && $_SESSION['page'] === true)) {
+        
+        // セッションの削除
+        unset($_SESSION['page']);
+    
+
+        $page_flag = 2;
+
+        // 変数とタイムゾーンを初期化
+        $header = null;
+        $body = null;
+        $auto_reply_subject = null;
+        $auto_reply_text = null;
+        $admin_reply_subject = null;
+        $admin_reply_text = null;
+        date_default_timezone_set('Asia/Tokyo');
+
+        // 日本語の使用宣言&文字コード指定
+        mb_language("ja");
+        mb_internal_encoding("UTF-8");
+
+        // ヘッダー情報を設定
+        $header = "MIME-Version: 1.0\n";
+        $header = "Content-Type: multipart/mixed;boundary=\"__BOUNDARY__\"\n";
+        $header .= "From: TAKATATSU事務所 <TAKATATSUtest@gmail.com>\n";
+        $header .= "Reply-TO: TAKATATSU事務所 <TAKATATSUtest@gmail.com>\n";
+
+        // 件名を設定
+        $auto_reply_subject = 'お問い合わせありがとうございます。';
+
+        // 本文を設定（送信者に送信）
+        $auto_reply_text = "この度はお問い合わせ頂き誠にありがとうございます。下記の内容でお問い合わせを受け付けました。\n\n";
+        $auto_reply_text .= "お問い合わせ日時:" . date("Y-m-d H:i") . "\n";
+        $auto_reply_text .= "氏名:" . $clean['your_name'] . "\n";
+        $auto_reply_text .= "メールアドレス:" . $clean['email'] . "\n";
+        
+        if ($clean['gender'] === "male") {
+            $auto_reply_text .= "性別:男性\n";
+        } else {
+            $auto_reply_text .= "性別:女性\n";
+        }
+
+        if ($clean['age'] === "1") {
+            $auto_reply_text .= "年齢:~19歳\n";
+        } elseif ($clean['age'] === "2") {
+            $auto_reply_text .= "年齢:20歳~29歳\n";
+        } elseif ($clean["age"] === "3") {
+            $auto_reply_text .= "年齢:30歳~39歳\n";
+        } elseif ($clean['age'] === "4") {
+            $auto_reply_text .= "年齢:40歳~49歳\n";
+        } elseif ($clean['age'] === "5") {
+            $auto_reply_text .= "年齢:50歳~59歳\n";
+        } elseif ($clean['age'] === "6") {
+            $auto_reply_text .= "年齢:60歳~\n";
+        }
+
+        $auto_reply_text .= "お問い合わせ内容:". nl2br($clean['contact']) ."\n\n";
+
+        $auto_reply_text .= "TAKATATSU 事務所";
+
+        // テキストメッセージをセット
+        $body = "--__BOUNDARY__\n";
+        $body .= "Content-type: text/plain; charset=\"ISO-2022-JP\"\n\n";
+        $body .= $auto_reply_text . "\n";
+        $body .= "--__BOUNDARY__\n";
+
+        // ファイルを添付
+        if (!empty($clean['attachment_file'])) {
+            $body .= "Content-Type: application/octet-stream; name=\"{$clean['attachment_file']}\"\n";
+            $body .= "Content-Disposition: attachment; filename=\"{$clean['attachment_file']}\"\n";
+            $body .= "Content-Transfer-Encoding: base64\n";
+            $body .= "\n";
+            $body .= chunk_split(base64_encode(file_get_contents(FILE_DIR . $clean['attachment_file'])));
+            $body .= "--__BOUNDARY__\n";
+        }
+
+        // メール送信
+        mb_send_mail($clean['email'], $auto_reply_subject, $body, $header);
+
+        // 運営側へ送るメール
+        $admin_reply_subject = "お問い合わせを受け付けました";
+
+
+        // 本文を設定(運営者に送信)
+        $admin_reply_text = "下記の内容でお問い合わせがありました。\n\n";
+        $admin_reply_text .= "お問い合わせ日時:" . date("Y-m-d H:i") . "\n";
+        $admin_reply_text .= "氏名:" . $clean['your_name'] . "\n";
+        $admin_reply_text .= "メールアドレス:" . $clean['email'] . "\n";
+        
+        if ($clean['gender'] === "male") {
+            $admin_reply_text .= "性別:男性\n";
+        } else {
+            $admin_reply_text .= "性別:女性\n";
+        }
+
+        if ($clean['age'] === "1") {
+            $admin_reply_text .= "年齢:~19歳\n";
+        } elseif ($clean['age'] === "2") {
+            $admin_reply_text .= "年齢:20歳~29歳\n";
+        } elseif ($clean["age"] === "3") {
+            $admin_reply_text .= "年齢:30歳~39歳\n";
+        } elseif ($clean['age'] === "4") {
+            $admin_reply_text .= "年齢:40歳~49歳\n";
+        } elseif ($clean['age'] === "5") {
+            $admin_reply_text .= "年齢:50歳~59歳\n";
+        } elseif ($clean['age'] === "6") {
+            $admin_reply_text .= "年齢:60歳~\n";
+        }
+
+        $admin_reply_text .= "お問い合わせ内容:". nl2br($clean['contact']) ."\n\n";
+
+        // テキストメッセージをセット
+        $body = "--__BOUNDARY__\n";
+        $body .= "Content-type: text/plain; charset=\"ISO-2022-JP\"\n\n";
+        $body .= $admin_reply_text . "\n";
+        $body .= "--__BOUNDARY__\n";
+
+        // ファイルを添付
+        if (!empty($clean['attachment_file'])) {
+            $body .= "Content-Type: application/octet-stream; name=\"{$clean['attachment_file']}\"\n";
+            $body .= "Content-Disposition: attachment; filename=\"{$clean['attachment_file']}\"\n";
+            $body .= "Content-Transfer-Encoding: base64\n";
+            $body .= "\n";
+            $body .= chunk_split(base64_encode(file_get_contents(FILE_DIR . $clean['attachment_file'])));
+            $body .= "--__BOUNDARY__\n";
+        }
+
+        // 運営側へメール送信
+        mb_send_mail('TAKATATSUtest@gmail.com', $admin_reply_subject, $body, $header);
+
     } else {
-        $auto_reply_text .= "性別:女性\n";
+        $page_flag = 0;
+        $error[] = "もう一度入力してください。";
     }
-
-    if ($_POST['age'] === "1") {
-        $auto_reply_text .= "年齢:~19歳\n";
-    } elseif ($_POST['age'] === "2") {
-        $auto_reply_text .= "年齢:20歳~29歳\n";
-    } elseif ($_POST["age"] === "3") {
-        $auto_reply_text .= "年齢:30歳~39歳\n";
-    } elseif ($_POST['age'] === "4") {
-        $auto_reply_text .= "年齢:40歳~49歳\n";
-    } elseif ($_POST['age'] === "5") {
-        $auto_reply_text .= "年齢:50歳~59歳\n";
-    } elseif ($_POST['age'] === "6") {
-        $auto_reply_text .= "年齢:60歳~\n";
-    }
-
-    $auto_reply_text .= "お問い合わせ内容:". nl2br($_POST['contact']) ."\n\n";
-
-    $auto_reply_text .= "TAKATATSU 事務所";
-
-    // メール送信
-    mb_send_mail($_POST['email'], $auto_reply_subject, $auto_reply_text, $header);
-
-    // 運営側へ送るメール
-    $admin_reply_subject = "お問い合わせを受け付けました";
-
-    // 本文を設定
-    $admin_reply_text = "下記の内容でお問い合わせがありました。\n\n";
-    $admin_reply_text .= "お問い合わせ日時:" . date("Y-m-d H:i") . "\n";
-    $admin_reply_text .= "氏名:" . $_POST['your_name'] . "\n";
-    $admin_reply_text .= "メールアドレス:" . $_POST['email'] . "\n";
-    
-    if ($_POST['gender'] === "male") {
-        $admin_reply_text .= "性別:男性\n";
-    } else {
-        $admin_reply_text .= "性別:女性\n";
-    }
-
-    if ($_POST['age'] === "1") {
-        $admin_reply_text .= "年齢:~19歳\n";
-    } elseif ($_POST['age'] === "2") {
-        $admin_reply_text .= "年齢:20歳~29歳\n";
-    } elseif ($_POST["age"] === "3") {
-        $admin_reply_text .= "年齢:30歳~39歳\n";
-    } elseif ($_POST['age'] === "4") {
-        $admin_reply_text .= "年齢:40歳~49歳\n";
-    } elseif ($_POST['age'] === "5") {
-        $admin_reply_text .= "年齢:50歳~59歳\n";
-    } elseif ($_POST['age'] === "6") {
-        $admin_reply_text .= "年齢:60歳~\n";
-    }
-
-    $admin_reply_text .= "お問い合わせ内容:". nl2br($_POST['contact']) ."\n\n";
-
-    // 運営側へメール送信
-    mb_send_mail('TAKATATSUtest@gmail.com', $admin_reply_subject, $admin_reply_text, $header);
 }
 
 function validation($date) {
@@ -235,7 +292,7 @@ function validation($date) {
             <?php if(!empty($clean['attachment_file'])) :?>
                 <div class="element_wrap">
                     <label>画像ファイルの添付</label>
-                    <p><img src="<?php echo FILE_DIR.$clean['attachment_file'] ;?>" alt=""></p>
+                    <p><img src="<?php echo FILE_DIR.$clean['attachment_file'] ;?>" alt="" width = "500"></p>
                 </div>
             <?php endif ;?>
 
