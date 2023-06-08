@@ -1,0 +1,17 @@
+参考記事：https://nakawork.net/posts/create-simple-todo-php
+
+index.php =　表示、各動作の処理
+db_config.php = データベース接続処理
+
+-このTODOアプリでは-
+1.TODOを作成すること
+2.作成したTODOを更新、削除できること
+3.作成したTODOを常に表示すること
+
+上記3点を満たしていればok
+
+関数を使用して「表示」「作成」「更新」「消去」をできるように。
+デザインなどは考慮せず、正しい機能が動けばok
+
+todo = データベース名
+list = テーブル名
