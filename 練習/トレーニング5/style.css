@@ -1,22 +1,22 @@
-body {
-    margin: 0 auto;
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
 }
 
-.test {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.list{
+    width: 1000px;
+    margin: 300px auto 0 auto;
+    overflow: hidden;
 }
 
-h1 {
-    font-size: 3rem;
-}
-
-.aiisaty {
-    color: red;
-}
-
-.test2 {
-    text-align: center;
+.list li{
+    padding: 20px;
+    background-color: #0c4dd5;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
 }
