@@ -113,13 +113,14 @@ $DATE = fetchALL();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TODOアプリ</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>TODOアプリ！</h1>
 
     <section>
 
-        <form action="" method="post">
+        <form action="" method="post" class="create_todo">
             <input type="text" name="submit" require>
             <button type="submit">作成する</button>
         </form>
@@ -128,16 +129,16 @@ $DATE = fetchALL();
         <table>
 
             <?php if($DATE):?>
-
-                <tr>
-                    <th bgcolor="#808080" rowspan="2">TODO</th>
-                    <th bgcolor="#808080" rowspan="2">作成日</th>
-                    <th bgcolor="#808080" colspan="2" id="action">操作</th>
+            
+                <tr class="table_style">
+                    <th rowspan="2">TODO</th>
+                    <th rowspan="2">作成日</th>
+                    <th colspan="2" id="action">操作</th>
                 </tr>
 
-                <tr>
-                    <th bgcolor="#808080" headers="action">更新</th>
-                    <th bgcolor="#808080" headers="action">削除</th>
+                <tr class="table_style">
+                    <th headers="action">更新</th>
+                    <th headers="action">削除</th>
                 </tr>
             <?php endif ;?>
 

@@ -1,0 +1,25 @@
+body {
+    margin: 0 auto;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 50px;
+    border-bottom: solid 1px;
+    display: inline-block;
+}
+
+.create_todo {
+    margin-top: 50px;
+}
+
+table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.table_style th{
+    background-color: #808080;
+}
