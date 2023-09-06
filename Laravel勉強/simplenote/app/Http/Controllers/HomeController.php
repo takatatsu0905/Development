@@ -56,4 +56,15 @@ class HomeController extends Controller
         return redirect()->route('home');
     }
 
+    public function edit($id){
+        // 該当するIDのメモをデータベースから取得
+        $user = \Auth::user();
+        $memo = Memo::where('status', 1)->where('id', $id)->where('user_id', $user['id'])
+            ->first();
+            // dd($memo);
+        $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
+        //取得したメモをViewに渡す
+        return view('edit',compact('memo','user','memos'));
+    }
+
 }
