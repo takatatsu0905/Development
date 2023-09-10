@@ -3,7 +3,13 @@
 @section('content')
 <div class="row justify-content-center ml-0 mr-0 h-100">
     <div class="card w-100">
-        <div class="card-header">メモ編集</div>
+        <div class="card-header">
+            メモ編集
+            <form action="/delete/{{ $memo['id'] }}" method='post' id='delete-form'>
+                @csrf
+                <button><i id='delete-button' class="fas fa-trash"></i></button>
+            </form>
+        </div>
         <div class="card-body">
             <form method='POST' action="{{ route('update', ['id' => $memo['id'] ]) }}">
                 @csrf
