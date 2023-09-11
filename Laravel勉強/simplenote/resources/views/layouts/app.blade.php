@@ -60,8 +60,8 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                        onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
@@ -82,14 +82,14 @@
                 {{ session('success') }}
             </div>
         @endif
-          <div class="row" style='height: 92vh;'>
+        <div class="row" style='height: 92vh;'>
             <div class="col-md-2 p-0">
-              <div class="card h-100">
-              <div class="card-header">タグ一覧</div>
-              <div class="card-body py-2 px-4">
-                <a class='d-block' href='/'>全て表示</a> 
+                <div class="card h-100">
+                <div class="card-header">タグ一覧</div>
+                <div class="card-body py-2 px-4">
+                    <a class='d-block' href='/'>全て表示</a>
                 @foreach($tags AS $tag)
-                    <a href="/?tag={{ $tag['name' }}" class="d-block">{{$tag['name']}}</a>
+                    <a href="/?tag={{ $tag['name'] }}" class="d-block">{{$tag['name']}}</a>
                 @endforeach
                 </div>
               </div>

@@ -3,11 +3,11 @@
 @section('content')
 <div class="row justify-content-center ml-0 mr-0 h-100">
     <div class="card w-100">
-        <div class="card-header">
+        <div class="card-header" style="display: flex; justify-content: space-between;">
             メモ編集
             <form action="/delete/{{ $memo['id'] }}" method='post' id='delete-form'>
                 @csrf
-                <button><i id='delete-button' class="fas fa-trash"></i></button>
+                <button class="p-0 mr-2" style="border: none;"><i id='delete-button' class="fas fa-trash"></i></button>
             </form>
         </div>
         <div class="card-body">
