@@ -27,7 +27,7 @@
                     <div class="flex flex-col items-center">
                         <label class="w-full max-w-3xl mx-auto">
                             <input 
-                                class="placeholder:italic placeholder:text-slate-400 black bg-white w-full border border-slate-300 rounded-md py-4 pl-4 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" 
+                                class="placeholder:italic placeholder:text-slate-400 black bg-white w-full border border-slate-300 rounded-md py-4 pl-4 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
                                 type="text" placeholder="洗濯物をする..." name="task_name" />
                             @error('task_name')
                                 <div clas="mt-3">
@@ -76,6 +76,9 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 @csrf
                                                                 @method('PUT')
+
+                                                                <input type="hidden" name="status" value="{{ $item->status }}">
+
                                                                 <button type="submit"
                                                                     class="bg-emerald-700 py-4 w-20 text-white md:hover:bg-emerald-800 transition-colors">
                                                                     完了
@@ -89,7 +92,8 @@
                                                             </a>
                                                         </div>
                                                         <div>
-                                                            <form action="/tasks/{{ $item->id }}" method="post"
+                                                            <form onsubmit="return deleteTask()";
+                                                                action="/tasks/{{ $item->id }}" method="post"
                                                                 class="inline-block text-gray-500 font-medium"
                                                                 role="menuitem" tabindex="-1">
                                                                 @csrf
@@ -121,5 +125,16 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function deleteTask() {
+            if (confirm('本当に削除しますか？')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+
 </body>
 </html>
