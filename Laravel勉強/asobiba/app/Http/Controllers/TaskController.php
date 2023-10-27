@@ -15,8 +15,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        
-        $tasks = Task::where('status','false')->get();
+        $user = \Auth::user();
+
+        $tasks = Task::where('status','false')->where('user_id', $user['id'])->get();
 
         return view('tasks.index', compact('tasks'));
     }
@@ -40,6 +41,10 @@ class TaskController extends Controller
     public function store(Request $request)
     {
 
+        $user = [
+            'user_id'=> $request->user()->id,
+        ];
+
         $rules = [
             'task_name' => 'required|max:100',
         ];
@@ -48,10 +53,14 @@ class TaskController extends Controller
 
         Validator::make($request->all(), $rules, $messages)->validate();
 
+        
+
+    
         // Taskモデルをインスタンス化
         $task = new Task;
 
         // モデル->カラム名 = 値 で、データを割り当てる
+        $task->user_id = $user['user_id'];
         $task->name = $request->input('task_name');
 
         // データベースに保存
