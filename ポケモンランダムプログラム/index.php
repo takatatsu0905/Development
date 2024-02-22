@@ -185,15 +185,19 @@
             "ポケモンimg/151ミュウ.png"
         ];
 
-        bt.addEventListener('click', function (e) {
-            target.innerHTML = ''; // 表示されているポケモンをクリア
+        bt.addEventListener('click', function() {
+            const tempImgList = [...imglist]; // 元の画像リストからコピーを作成
+            const selectedImages = [];
 
-            for (let i = 0; i < 6; i++) {
-                const selectnum = Math.floor(Math.random() * imglist.length);
-                const element = '<img src="' + imglist[selectnum] + '" alt="" />';
-                target.innerHTML += element;
+            while (selectedImages.length < 6 && tempImgList.length > 0) {
+                const selectnum = Math.floor(Math.random() * tempImgList.length);
+                selectedImages.push(tempImgList.splice(selectnum, 1)[0]); // 重複しないように選択
             }
-        }, false);
+
+            const imageElements = selectedImages.map(img => '<img src="' + img + '" alt="" />').join('');
+            target.innerHTML = imageElements;
+        });
+
     </script>
 
 </body>
